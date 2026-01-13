@@ -5,6 +5,7 @@
   "scripts": {
     "db:studio": "npx prisma studio -p 5555 --config ./prisma.config.ts",
     "db:generate": "npx prisma migrate dev && npx prisma generate",
+    "db:seed": "tsx prisma/seeders/index.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
