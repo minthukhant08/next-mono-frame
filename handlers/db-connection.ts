@@ -28,7 +28,7 @@ export const catchDBError = async <T>(
 				message = 'A known error occurred: ' + error.message
 			}
 		} else {
-			message = 'Unexpected error occurred: ' + error.message
+			message = 'Unexpected error occurred: ' + (error as { message : string} ).message
 		}
 		throw new DBException(message, meta, 500)
 	} finally {
@@ -36,7 +36,7 @@ export const catchDBError = async <T>(
 	}
 }
 
-export const handleDB = async <T>(
+export const DBhandler = async <T>(
 	operation: (transaction: Prisma.TransactionClient) => Promise<T>,
 	transaction?: Prisma.TransactionClient
 ): Promise<T | null> => {
