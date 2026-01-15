@@ -1,11 +1,9 @@
 import * as bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
-import moment from 'moment'
 
 import AppException from '@/exceptions/app-exception'
 import settingSvc from '@/services/setting';
-import { Prisma } from '@/generated/prisma/client'
 
 export const hashPassword = async (password: string): Promise<string> => {
 	const saltRounds = 10
