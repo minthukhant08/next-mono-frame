@@ -17,7 +17,7 @@ const responseInterceptor: ResponseInterceptor = async (res) => {
 }
 
 export const fetchClient = createFetchClient({
-    baseURL: 'http://localhost:3000/api',
+    baseURL: process.env.BASE_URL + '/api',
     onRequest: [requestInterceptor],
     onResponse: [responseInterceptor]
 })
