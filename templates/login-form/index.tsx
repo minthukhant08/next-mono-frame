@@ -21,12 +21,17 @@ export default function LoginForm() {
 
     })
 
-    function onSubmit(values: z.infer<typeof loginSchema>) {
+    const onSubmit = (values: z.infer<typeof loginSchema>) => {
         signIn('credentials', {
-            redirect: false,
             email: values.email,
-            password: values.password
-        }).then((res) => router.push("/dashboard"))
+            password: values.password,
+            redirect: false
+        }).then((res) => {
+            if (res?.ok){
+                router.push("/dashboard")
+            }
+            console.log(res, 'login..........')
+        })
     }
 
     return (

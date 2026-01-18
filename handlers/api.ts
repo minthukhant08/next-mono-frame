@@ -1,14 +1,16 @@
 import { transformZodErrors } from '@/utils';
+import { validate } from '@/utils/validator';
 import { NextRequest, NextResponse } from 'next/server';
-import { ZodError } from 'zod';
+import z, { ZodError, ZodTypeAny } from 'zod';
+import { AnyZodObject } from 'zod/v3';
 
 
 type Handler = (req: NextRequest, context?: any) => Promise<Response>;
 
-const getErrorResponse = (error: unknown) : NextResponse<ErrorResponse> => {
+const getErrorResponse = (error: unknown): NextResponse<ErrorResponse> => {
     let statusCode = 500;
     let errorMessage: string | object = 'Internal Server Error';
-    
+
     if (error instanceof ZodError) {
         statusCode = 422
         errorMessage = transformZodErrors(error)
@@ -36,18 +38,30 @@ export const apiHandler = (handler: Handler): Handler => {
     };
 }
 
-type ActionHandler<TArgs extends any[], TResult> =
-    (...args: TArgs) => Promise<TResult>;
+export const withApi =
+    <TBody extends z.ZodTypeAny, TQuery extends z.ZodTypeAny>(
+        schemas: { body?: TBody; query?: TQuery }
+    ) =>
+        (handler: (data: { body: z.infer<TBody>; query: z.infer<TQuery> }) => Promise<any>) =>
+            apiHandler(
+                (schemas.query ? validateQuery(schemas.query) : (h: any) => h)(
+                    (schemas.body ? validate(schemas.body) : (h: any) => h)(
+                        async (req, { body, query }) => {
+                            return handler({ body, query });
+                        }
+                    )
+                )
+            );
 
-export function actionHandler<TArgs extends any[], TResult>(
-    handler: ActionHandler<TArgs, TResult>
-) {
-    return async (...args: TArgs): Promise<TResult | NextResponse<ErrorResponse>> => {
-        try {
-            return await handler(...args);
-        } catch (error) {
-            console.error("Action Error:", error);
-            return getErrorResponse(error)
-        }
+
+export function validateQuery(schema: z.ZodTypeAny): (handler: Handler) => Handler {
+    return (handler: Handler) => {
+        return async (req, context) => {
+            const { searchParams } = new URL(req.url);
+            const queryParams = Object.fromEntries(searchParams.entries());
+            const validatedQuery = schema.parse(queryParams);
+            return handler(req, { ...context, query: validatedQuery });
+        };
     };
 }
+

@@ -1,0 +1,35 @@
+import { Prisma } from "@/generated/prisma/client"
+import { actionHandler, apiHandler, responseHandler, withApi } from "@/handlers"
+import userRepo from "@/repositories/user"
+import { userListSchema } from "@/schemas/user"
+
+export type UserReponse = {
+    id: number,
+    name: string;
+    email: string;
+    password: string;
+    created_at: Date;
+    updated_at: Date;
+}
+export default {
+    getAll: withApi({ query: userListSchema })(async ({ query }) => {
+        const { offset, limit, search } = query
+        const options: Prisma.UserFindFirstArgs = {
+            omit: { deleted_at: true},
+            where: {
+                name: {
+                    contains: search
+                }
+            },
+            skip: offset,
+            take: limit
+        }
+        // cons
+        const users = await userRepo.all(options)
+        console.log(users, 'users')
+        return responseHandler(200, users)
+    })
+
+}
+
+

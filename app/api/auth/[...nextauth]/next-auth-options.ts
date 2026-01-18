@@ -1,7 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials"
-// import { login, LoginResponse } from "@/actions/auth"
-import authApi from '@/api/auth'
 import { AuthOptions } from "next-auth"
+import { login } from '@/controllers/auth'
 
 
 export const authOptions: AuthOptions = {
@@ -13,32 +12,25 @@ export const authOptions: AuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                // const response = await login(credentials!)
-                // if (response.ok){
-                //     const body = await response.json() as HTTPResponse<LoginResponse>
-                //     const { id, email, name } = body.data.user
-                //     return { id, email, name , accessToken: body.data.accessToken }
-                // }
                 try {
-                    const response = await authApi.login(credentials!)
-                    const { id, email, name } = response.data.user
-                    console.log("fetcher...", { id, email, name, accessToken: response.data.accessToken })
-                    return { id, email, name, accessToken: response.data.accessToken }
+                    let res = await login(credentials!) 
+                    if (res.ok){
+                         const { id, email, name } = res.data.user
+                         return { id, email, name, accessToken: res.data.accessToken }
+                    }else{
+                        console.log(res.message)
+                    }
+                    return null
                 } catch (error) {
-                    console.log(error, 'err............')
+                    console.log("error..", error)
                     return null
                 }
-
-                return null
             },
 
         })
     ],
     callbacks: {
         async jwt({ token, user }) {
-            // if (user) {
-            // 	token.accessToken = user.accessToken
-            // }
             return { ...user, ...token }
         },
         async session({ session, token }) {

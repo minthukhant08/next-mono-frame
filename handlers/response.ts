@@ -5,7 +5,7 @@ export const responseHandler = <T>(
   data: T
 ): NextResponse<HTTPResponse<T>> => {
   const response: HTTPResponse<T> = {
-    success: 1,
+    success: true,
     data
   };
 
@@ -14,3 +14,4 @@ export const responseHandler = <T>(
     headers: { "Content-Type": "application/json" }
   });
 };
+
