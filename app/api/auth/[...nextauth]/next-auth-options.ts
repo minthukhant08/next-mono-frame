@@ -11,7 +11,7 @@ export const authOptions: AuthOptions = {
                 email: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials, _req) {
                 try {
                     let res = await login(credentials!) 
                     if (res.ok){

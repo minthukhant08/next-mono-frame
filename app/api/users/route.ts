@@ -1,4 +1,3 @@
-import { apiHandler, responseHandler } from "@/handlers";
 import { NextRequest } from "next/server";
 import userController from "@/controllers/api/user";
 

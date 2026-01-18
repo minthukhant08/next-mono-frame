@@ -1,5 +1,5 @@
 import { Prisma } from "@/generated/prisma/client"
-import { actionHandler, apiHandler, responseHandler, withApi } from "@/handlers"
+import { responseHandler, withApi } from "@/utils/handlers"
 import userRepo from "@/repositories/user"
 import { userListSchema } from "@/schemas/user"
 
@@ -24,10 +24,8 @@ export default {
             skip: offset,
             take: limit
         }
-        // cons
         const users = await userRepo.all(options)
-        console.log(users, 'users')
-        return responseHandler(200, users)
+        return responseHandler(200, users satisfies UserReponse[] | null)
     })
 
 }

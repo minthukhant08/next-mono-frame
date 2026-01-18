@@ -1,9 +1,7 @@
 import { transformZodErrors } from '@/utils';
 import { validate } from '@/utils/validator';
 import { NextRequest, NextResponse } from 'next/server';
-import z, { ZodError, ZodTypeAny } from 'zod';
-import { AnyZodObject } from 'zod/v3';
-
+import z, { ZodError } from 'zod';
 
 type Handler = (req: NextRequest, context?: any) => Promise<Response>;
 
@@ -22,7 +20,7 @@ const getErrorResponse = (error: unknown): NextResponse<ErrorResponse> => {
     }
 
     return NextResponse.json(
-        { success: false, message: errorMessage },
+        { ok: false, message: errorMessage },
         { status: statusCode }
     );
 }
@@ -35,6 +33,17 @@ export const apiHandler = (handler: Handler): Handler => {
             console.error('API Handler Error:', error);
             return getErrorResponse(error)
         }
+    };
+}
+
+export function validateQuery(schema: z.ZodTypeAny): (handler: Handler) => Handler {
+    return (handler: Handler) => {
+        return async (req, context) => {
+            const { searchParams } = new URL(req.url);
+            const queryParams = Object.fromEntries(searchParams.entries());
+            const validatedQuery = schema.parse(queryParams);
+            return handler(req, { ...context, query: validatedQuery });
+        };
     };
 }
 
@@ -54,14 +63,18 @@ export const withApi =
             );
 
 
-export function validateQuery(schema: z.ZodTypeAny): (handler: Handler) => Handler {
-    return (handler: Handler) => {
-        return async (req, context) => {
-            const { searchParams } = new URL(req.url);
-            const queryParams = Object.fromEntries(searchParams.entries());
-            const validatedQuery = schema.parse(queryParams);
-            return handler(req, { ...context, query: validatedQuery });
-        };
-    };
-}
 
+export const responseHandler = <T>(
+    statusCode: number,
+    data: T
+): NextResponse<HTTPResponse<T>> => {
+    const response: HTTPResponse<T> = {
+        ok: true,
+        data
+    };
+
+    return new NextResponse(JSON.stringify(response), {
+        status: statusCode,
+        headers: { "Content-Type": "application/json" }
+    });
+};

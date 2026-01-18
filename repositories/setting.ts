@@ -1,7 +1,7 @@
 
 
 import { Prisma, Setting } from '@/generated/prisma/client';
-import { DBhandler } from '@/handlers'
+import { DBhandler } from '@/utils/handlers'
 
 export const getSettingValueByKey = (
 	key: string,
