@@ -1,4 +1,4 @@
-import { Prisma } from "@/generated/prisma/client"
+import { Prisma } from "@/prisma/generated/prisma/client"
 import { responseHandler, withApi } from "@/utils/handlers"
 import userRepo from "@/repositories/user"
 import { userListSchema } from "@/schemas/user"

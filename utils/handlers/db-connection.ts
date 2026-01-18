@@ -1,5 +1,5 @@
 
-import { Prisma } from '@/generated/prisma/client'
+import { Prisma } from '@/prisma/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import DBException from '@/exceptions/db-exception'
 
