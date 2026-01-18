@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 
 import AppException from '@/exceptions/app-exception'
-import settingSvc from '@/services/setting';
+import settingSvc from '@/services/setting'
 
 export const hashPassword = async (password: string): Promise<string> => {
 	const saltRounds = 10
@@ -15,7 +15,7 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 export const comparePassword = async (
 	password: string,
-	user_password: string
+	user_password: string,
 ): Promise<void> => {
 	const result = await bcrypt.compare(password, user_password)
 	if (!result) {
@@ -26,7 +26,7 @@ export const comparePassword = async (
 export const generateAccessToken = async (value: object): Promise<string> => {
 	const JWT_EXPIRE_IN = (await settingSvc.getSetting(
 		'JWT_EXPIRE_IN',
-		'string'
+		'string',
 	)) as string
 	const expiresIn = parseInt(JWT_EXPIRE_IN)
 	const payload = {
@@ -38,12 +38,11 @@ export const generateAccessToken = async (value: object): Promise<string> => {
 	return jwt.sign(payload, process.env.JWT_SECRET as jwt.Secret)
 }
 
-
 export const decodeToken = (token: string) => {
 	try {
 		return jwt.verify(token, process.env.JWT_SECRET as jwt.Secret)
 	} catch (error) {
-		throw new AppException((error as { message : string }).message, 401)
+		throw new AppException((error as { message: string }).message, 401)
 	}
 }
 

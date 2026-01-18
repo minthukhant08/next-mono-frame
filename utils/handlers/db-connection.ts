@@ -1,15 +1,13 @@
-
 import { Prisma } from '@/prisma/generated/prisma/client'
 import { prisma } from '@/lib/prisma'
 import DBException from '@/exceptions/db-exception'
-
 
 export const getPrisamInstant = (transaction?: Prisma.TransactionClient) => {
 	return transaction || prisma
 }
 
 export const catchDBError = async <T>(
-	callback: () => Promise<T>
+	callback: () => Promise<T>,
 ): Promise<T | null> => {
 	try {
 		return await callback()
@@ -28,7 +26,9 @@ export const catchDBError = async <T>(
 				message = 'A known error occurred: ' + error.message
 			}
 		} else {
-			message = 'Unexpected error occurred: ' + (error as { message : string} ).message
+			message =
+				'Unexpected error occurred: ' +
+				(error as { message: string }).message
 		}
 		throw new DBException(message, meta, 500)
 	} finally {
@@ -38,7 +38,7 @@ export const catchDBError = async <T>(
 
 export const DBhandler = async <T>(
 	operation: (transaction: Prisma.TransactionClient) => Promise<T>,
-	transaction?: Prisma.TransactionClient
+	transaction?: Prisma.TransactionClient,
 ): Promise<T | null> => {
 	return catchDBError(async () => {
 		const prisma = getPrisamInstant(transaction)

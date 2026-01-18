@@ -1,19 +1,16 @@
 type HTTPResponse<T> = {
-  ok: true;
-  data: T;
+	ok: true
+	data: T
 }
 
 type ErrorResponse = {
-    ok: false,
-    message: string | object
+	ok: false
+	message: string | object
 }
 
-type QueryParams = Record<
-  string,
-  string | number | boolean | null | undefined
->
+type QueryParams = Record<string, string | number | boolean | null | undefined>
 
 type getRequestObject = {
-  params?: QueryParams,
-  config?: FetchRequestConfig
+	params?: QueryParams
+	config?: FetchRequestConfig
 }

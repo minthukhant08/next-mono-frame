@@ -1,14 +1,12 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/next-auth-options";
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]/next-auth-options'
 
 export default async function PrivateLayout({
-    children,
+	children,
 }: Readonly<{
-    children: React.ReactNode;
+	children: React.ReactNode
 }>) {
-    const session = await getServerSession(authOptions);
+	const session = await getServerSession(authOptions)
 
-    return (
-        <>{children}</>
-    );
+	return <>{children}</>
 }

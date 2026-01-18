@@ -1,11 +1,9 @@
-
-
-import { Prisma, Setting } from '@/prisma/generated/prisma/client';
+import { Prisma, Setting } from '@/prisma/generated/prisma/client'
 import { DBhandler } from '@/utils/handlers'
 
 export const getSettingValueByKey = (
 	key: string,
-	transaction?: Prisma.TransactionClient
+	transaction?: Prisma.TransactionClient,
 ): Promise<{ key: string; value: string } | null> => {
 	return DBhandler(
 		async (prisma) =>
@@ -19,32 +17,34 @@ export const getSettingValueByKey = (
 					deleted_at: null,
 				},
 			}),
-		transaction
+		transaction,
 	)
 }
 
-export const findByKey = async (key: string, transaction?: Prisma.TransactionClient): Promise<Setting | null> => {
+export const findByKey = async (
+	key: string,
+	transaction?: Prisma.TransactionClient,
+): Promise<Setting | null> => {
 	return DBhandler(
 		async (prisma) => prisma.setting.findFirst({ where: { key } }),
-		transaction
+		transaction,
 	)
 }
 
-export const findAll = async (transaction?: Prisma.TransactionClient): Promise<Setting[] | null> => {
-	return DBhandler(
-		async (prisma) => prisma.setting.findMany(),
-		transaction
-	)
+export const findAll = async (
+	transaction?: Prisma.TransactionClient,
+): Promise<Setting[] | null> => {
+	return DBhandler(async (prisma) => prisma.setting.findMany(), transaction)
 }
 
 export const update = async (
 	id: number,
 	data: Prisma.SettingUpdateInput,
-	transaction?: Prisma.TransactionClient
+	transaction?: Prisma.TransactionClient,
 ): Promise<Setting | null> => {
 	return DBhandler(
 		async (prisma) => prisma.setting.update({ where: { id }, data }),
-		transaction
+		transaction,
 	)
 }
 export default {

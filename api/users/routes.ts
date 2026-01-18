@@ -1,5 +1,3 @@
-
-
 export default {
-    resource : '/users',
+	resource: '/users',
 }
