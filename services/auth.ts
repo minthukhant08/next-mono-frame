@@ -28,13 +28,17 @@ export const generateAccessToken = async (value: object): Promise<string> => {
 		'JWT_EXPIRE_IN',
 		'string',
 	)) as string
-	const expiresIn = parseInt(JWT_EXPIRE_IN)
+
+	const expiresInSeconds = parseInt(JWT_EXPIRE_IN)
+	const iatSeconds = Math.floor(Date.now() / 1000)
+
 	const payload = {
 		...value,
-		iat: Date.now(),
-		exp: Date.now() + expiresIn,
+		iat: iatSeconds,
+		exp: iatSeconds + expiresInSeconds,
 		jti: uuidv4(),
 	}
+
 	return jwt.sign(payload, process.env.JWT_SECRET as jwt.Secret)
 }
 
@@ -42,7 +46,7 @@ export const decodeToken = (token: string) => {
 	try {
 		return jwt.verify(token, process.env.JWT_SECRET as jwt.Secret)
 	} catch (error) {
-		throw new AppException((error as { message: string }).message, 401)
+		return null
 	}
 }
 

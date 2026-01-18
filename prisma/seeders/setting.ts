@@ -6,12 +6,12 @@ export default async function seed() {
 		await prisma.setting.upsert({
 			where: { key: 'JWT_EXPIRE_IN' },
 			update: {
-				value: '300000',
+				value: '300',
 			},
 			create: {
 				key: 'JWT_EXPIRE_IN',
-				value: '300000',
-				description: '5 mins in milliseconds',
+				value: '300',
+				description: '5 mins in seconds',
 			},
 		})
 		console.log('Settings seeded successfully.')
