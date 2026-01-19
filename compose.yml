@@ -1,7 +1,30 @@
 services:
+    app:
+        container_name: next-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped 
+        environment:
+            NODE_ENV: production
+            DATABASE_URL: postgresql://${DB_USER:-aceplus}:${DB_PASSWORD:-aceplus123}@postgres:5432/${DB_NAME:-database}?schema=public
+        depends_on:
+            - prisma
+    prisma:
+        container_name: prisma
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: builder
+        command: npx prisma migrate deploy
+        environment:
+            DATABASE_URL: postgresql://${DB_USER:-aceplus}:${DB_PASSWORD:-aceplus123}@postgres:5432/${DB_NAME:-database}?schema=public
+        depends_on:
+            - postgres
+        restart: "no" 
     postgres:
         image: postgres:17
-        container_name: nextdb
+        container_name: next-db
         restart: unless-stopped
         ports:
             - '${DB_PORT:-5432}:5432'
@@ -11,6 +34,16 @@ services:
             POSTGRES_PASSWORD: ${DB_PASSWORD:-aceplus123}
         volumes:
             - pgdata:/var/lib/postgresql/data
+    nginx:
+        image: nginx:alpine
+        container_name: next-nginx
+        restart: unless-stopped
+        ports:
+            - "3000:80"
+        volumes:
+            - ./.nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        depends_on:
+            - app
 
 volumes:
     pgdata:

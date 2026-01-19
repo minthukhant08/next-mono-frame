@@ -28,7 +28,7 @@ const responseInterceptor: ResponseInterceptor = async (res) => {
 }
 
 export const fetchClientWithAuth = createFetchClient({
-	baseURL: process.env.BASE_URL + '/api',
+	baseURL: 'http://' + (process.env.HOSTNAME || 'localhost') + ':3000/api',
 	onRequest: [requestInterceptor],
 	onResponse: [responseInterceptor],
 })
