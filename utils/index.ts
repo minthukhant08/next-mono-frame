@@ -1,4 +1,5 @@
-import { ZodError } from 'zod'
+import z, { ZodError } from 'zod'
+import { NextRequest } from 'next/server'
 
 export const normalizeEmail = (
 	email: String | undefined | null,
@@ -33,4 +34,16 @@ export function toQueryString(
 
 	const query = searchParams.toString()
 	return query ? `?${query}` : ''
+}
+
+type Handler = (req: NextRequest, context?: any) => Promise<Response>
+
+export function validate(schema: z.ZodTypeAny): (handler: Handler) => Handler {
+	return (handler: Handler) => {
+		return async (req, context) => {
+			const body = await req.json()
+			const validatedBody = schema.parse(body)
+			return handler(req, { ...context, body: validatedBody })
+		}
+	}
 }
