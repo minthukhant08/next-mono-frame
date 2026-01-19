@@ -1,4 +1,4 @@
-import settingRepo from '@/repositories/setting'
+import settingRepo from '@/backend/repositories/setting'
 
 export const getSetting = async (key: string, type: 'string' | 'number') => {
 	const result = await settingRepo.getSettingValueByKey(key)

@@ -1,5 +1,5 @@
-import userSeeder from '@/prisma/seeders/user'
-import settingSeeder from '@/prisma/seeders/setting'
+import userSeeder from '@/backend/prisma/seeders/user'
+import settingSeeder from '@/backend/prisma/seeders/setting'
 
 const main = async () => {
 	try {

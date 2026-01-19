@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 
-import AppException from '@/exceptions/app-exception'
+import AppException from '@/backend/exceptions/app-exception'
 import settingSvc from '@/services/setting'
 
 export const hashPassword = async (password: string): Promise<string> => {

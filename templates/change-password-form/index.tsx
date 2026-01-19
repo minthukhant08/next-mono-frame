@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form } from '@/components/ui/form'
 import { changePasswordSchema } from '@/schemas/auth'
-import { changePassword } from '@/controllers/auth'
+import { changePassword } from '@/backend/controllers/auth'
 
 export default function ChangePasswordForm() {
 	const form = useForm<z.infer<typeof changePasswordSchema>>({

@@ -1,6 +1,6 @@
-import { Prisma } from '@/prisma/generated/prisma/client'
-import { prisma } from '@/lib/prisma'
-import DBException from '@/exceptions/db-exception'
+import { Prisma } from '@/backend/prisma/generated/prisma/client'
+import { prisma } from '@/backend/lib/prisma'
+import DBException from '@/backend/exceptions/db-exception'
 
 export const getPrisamInstant = (transaction?: Prisma.TransactionClient) => {
 	return transaction || prisma

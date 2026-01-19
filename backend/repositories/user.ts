@@ -1,4 +1,4 @@
-import { Prisma, User } from '@/prisma/generated/prisma/client'
+import { Prisma, User } from '@/backend/prisma/generated/prisma/client'
 import { DBhandler } from '@/utils/handlers/db-connection'
 
 export const findByEmail = async (

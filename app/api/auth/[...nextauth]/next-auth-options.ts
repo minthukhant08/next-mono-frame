@@ -1,6 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { AuthOptions } from 'next-auth'
-import { login } from '@/controllers/auth'
+import { login } from '@/backend/controllers/auth'
 
 export const authOptions: AuthOptions = {
 	providers: [
