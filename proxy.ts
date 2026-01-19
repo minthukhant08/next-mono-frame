@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { decodeToken } from '@/services/auth'
+import { decodeToken } from '@/backend/services/auth'
 
 export const config = {
 	matcher: ['/api/:path*'],
