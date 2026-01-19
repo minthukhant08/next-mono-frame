@@ -1,6 +1,6 @@
 'use server'
 import userRepo from '@/backend/repositories/user'
-import authSvc from '@/services/auth'
+import authSvc from '@/backend/services/auth'
 import { actionHandler } from '@/utils/handlers'
 import AppException from '@/backend/exceptions/app-exception'
 import z from 'zod'

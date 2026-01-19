@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import jwt from 'jsonwebtoken'
 
 import AppException from '@/backend/exceptions/app-exception'
-import settingSvc from '@/services/setting'
+import settingSvc from '@/backend/services/setting'
 
 export const hashPassword = async (password: string): Promise<string> => {
 	const saltRounds = 10
