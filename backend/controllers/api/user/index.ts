@@ -1,11 +1,11 @@
 import { Prisma } from '@/backend/prisma/generated/prisma/client'
-import { responseHandler, withApi } from '@/utils/handlers'
+import { responseHandler, apiHandler } from '@/utils/handlers'
 import userRepo from '@/backend/repositories/user'
 import { userListSchema } from '@/schemas/user'
 import { UserReponse } from './types'
 
 export default {
-	getAll: withApi({ query: userListSchema })(async ({ query }) => {
+	getAll: apiHandler({ query: userListSchema })(async ({ query }) => {
 		const { offset, limit, search } = query
 		const options: Prisma.UserFindFirstArgs = {
 			omit: { deleted_at: true },

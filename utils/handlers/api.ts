@@ -25,7 +25,7 @@ const getErrorResponse = (error: unknown): NextResponse<ErrorResponse> => {
 	)
 }
 
-export const apiHandler = (handler: Handler): Handler => {
+export const withApi = (handler: Handler): Handler => {
 	return async (req, context) => {
 		try {
 			return await handler(req, context)
@@ -49,7 +49,7 @@ export function validateQuery(
 	}
 }
 
-export const withApi =
+export const apiHandler =
 	<TBody extends z.ZodTypeAny, TQuery extends z.ZodTypeAny>(schemas: {
 		body?: TBody
 		query?: TQuery
@@ -60,7 +60,7 @@ export const withApi =
 			query: z.infer<TQuery>
 		}) => Promise<any>,
 	) =>
-		apiHandler(
+		withApi(
 			(schemas.query ? validateQuery(schemas.query) : (h: any) => h)(
 				(schemas.body ? validate(schemas.body) : (h: any) => h)(
 					async (req, { body, query }) => {
