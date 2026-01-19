@@ -8,6 +8,6 @@ export default async function Dashboard() {
 	if (res.ok) {
 		res.data
 	}
-	console.log(res.data[0].id)
+	console.log(res.data && res.data[0].id)
 	return <div>Dashboard</div>
 }
