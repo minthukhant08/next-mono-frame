@@ -1,5 +1,5 @@
 import { transformZodErrors } from '@/utils'
-import { validate } from '@/utils/validator'
+import { validate } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
 import z, { ZodError } from 'zod'
 
