@@ -33,3 +33,15 @@ model Setting {
   deleted_at  DateTime?
 }
 
+model AuditLog {
+  id        String   @id @default(cuid())
+  model     String
+  action    String   
+  recordId  String?
+  oldData   Json?
+  newData   Json?
+  userId    String?
+  createdAt DateTime @default(now())
+
+  @@index([model, recordId])
+}

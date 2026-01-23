@@ -9,4 +9,5 @@
  */
 export type * from './models/User'
 export type * from './models/Setting'
+export type * from './models/AuditLog'
 export type * from './commonInputTypes'

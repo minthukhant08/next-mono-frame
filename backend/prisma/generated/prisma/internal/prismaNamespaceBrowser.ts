@@ -56,6 +56,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
 	User: 'User',
 	Setting: 'Setting',
+	AuditLog: 'AuditLog',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -100,12 +101,34 @@ export const SettingScalarFieldEnum = {
 export type SettingScalarFieldEnum =
 	(typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum]
 
+export const AuditLogScalarFieldEnum = {
+	id: 'id',
+	model: 'model',
+	action: 'action',
+	recordId: 'recordId',
+	oldData: 'oldData',
+	newData: 'newData',
+	userId: 'userId',
+	createdAt: 'createdAt',
+} as const
+
+export type AuditLogScalarFieldEnum =
+	(typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
 export const SortOrder = {
 	asc: 'asc',
 	desc: 'desc',
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+export const NullableJsonNullValueInput = {
+	DbNull: 'DbNull',
+	JsonNull: 'JsonNull',
+} as const
+
+export type NullableJsonNullValueInput =
+	(typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 export const QueryMode = {
 	default: 'default',
@@ -120,3 +143,12 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+export const JsonNullValueFilter = {
+	DbNull: 'DbNull',
+	JsonNull: 'JsonNull',
+	AnyNull: 'AnyNull',
+} as const
+
+export type JsonNullValueFilter =
+	(typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]

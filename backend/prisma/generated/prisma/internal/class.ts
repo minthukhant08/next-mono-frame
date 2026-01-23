@@ -19,7 +19,7 @@ const config: runtime.GetPrismaClientConfig = {
 	engineVersion: '0c8ef2ce45c83248ab3df073180d5eda9e8be7a3',
 	activeProvider: 'postgresql',
 	inlineSchema:
-		'// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  output   = "./generated/prisma"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\nmodel User {\n  id         Int       @id @default(autoincrement())\n  name       String\n  email      String\n  password   String\n  created_at DateTime  @default(now())\n  updated_at DateTime  @updatedAt\n  deleted_at DateTime?\n}\n\nmodel Setting {\n  id          Int       @id @default(autoincrement())\n  key         String    @unique\n  value       String\n  description String?\n  created_at  DateTime  @default(now())\n  updated_at  DateTime  @updatedAt\n  deleted_at  DateTime?\n}\n',
+		'// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = "prisma-client"\n  output   = "./generated/prisma"\n}\n\ndatasource db {\n  provider = "postgresql"\n}\n\nmodel User {\n  id         Int       @id @default(autoincrement())\n  name       String\n  email      String\n  password   String\n  created_at DateTime  @default(now())\n  updated_at DateTime  @updatedAt\n  deleted_at DateTime?\n}\n\nmodel Setting {\n  id          Int       @id @default(autoincrement())\n  key         String    @unique\n  value       String\n  description String?\n  created_at  DateTime  @default(now())\n  updated_at  DateTime  @updatedAt\n  deleted_at  DateTime?\n}\n\nmodel AuditLog {\n  id        String   @id @default(cuid())\n  model     String\n  action    String\n  recordId  String?\n  oldData   Json?\n  newData   Json?\n  userId    String?\n  createdAt DateTime @default(now())\n\n  @@index([model, recordId])\n}\n',
 	runtimeDataModel: {
 		models: {},
 		enums: {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
 }
 
 config.runtimeDataModel = JSON.parse(
-	'{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"Int"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"created_at","kind":"scalar","type":"DateTime"},{"name":"updated_at","kind":"scalar","type":"DateTime"},{"name":"deleted_at","kind":"scalar","type":"DateTime"}],"dbName":null},"Setting":{"fields":[{"name":"id","kind":"scalar","type":"Int"},{"name":"key","kind":"scalar","type":"String"},{"name":"value","kind":"scalar","type":"String"},{"name":"description","kind":"scalar","type":"String"},{"name":"created_at","kind":"scalar","type":"DateTime"},{"name":"updated_at","kind":"scalar","type":"DateTime"},{"name":"deleted_at","kind":"scalar","type":"DateTime"}],"dbName":null}},"enums":{},"types":{}}',
+	'{"models":{"User":{"fields":[{"name":"id","kind":"scalar","type":"Int"},{"name":"name","kind":"scalar","type":"String"},{"name":"email","kind":"scalar","type":"String"},{"name":"password","kind":"scalar","type":"String"},{"name":"created_at","kind":"scalar","type":"DateTime"},{"name":"updated_at","kind":"scalar","type":"DateTime"},{"name":"deleted_at","kind":"scalar","type":"DateTime"}],"dbName":null},"Setting":{"fields":[{"name":"id","kind":"scalar","type":"Int"},{"name":"key","kind":"scalar","type":"String"},{"name":"value","kind":"scalar","type":"String"},{"name":"description","kind":"scalar","type":"String"},{"name":"created_at","kind":"scalar","type":"DateTime"},{"name":"updated_at","kind":"scalar","type":"DateTime"},{"name":"deleted_at","kind":"scalar","type":"DateTime"}],"dbName":null},"AuditLog":{"fields":[{"name":"id","kind":"scalar","type":"String"},{"name":"model","kind":"scalar","type":"String"},{"name":"action","kind":"scalar","type":"String"},{"name":"recordId","kind":"scalar","type":"String"},{"name":"oldData","kind":"scalar","type":"Json"},{"name":"newData","kind":"scalar","type":"Json"},{"name":"userId","kind":"scalar","type":"String"},{"name":"createdAt","kind":"scalar","type":"DateTime"}],"dbName":null}},"enums":{},"types":{}}',
 )
 
 async function decodeBase64AsWasm(
@@ -246,6 +246,16 @@ export interface PrismaClient<
 	 * ```
 	 */
 	get setting(): Prisma.SettingDelegate<ExtArgs, { omit: OmitOpts }>
+
+	/**
+	 * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
+	 * Example usage:
+	 * ```ts
+	 * // Fetch zero or more AuditLogs
+	 * const auditLogs = await prisma.auditLog.findMany()
+	 * ```
+	 */
+	get auditLog(): Prisma.AuditLogDelegate<ExtArgs, { omit: OmitOpts }>
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
