@@ -7,6 +7,7 @@ import z from 'zod'
 import { changePasswordSchema, loginSchema } from '@/schemas/auth'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/next-auth-options'
+import { setCurrentUserId } from '@/backend/lib/prisma'
 
 export const login = actionHandler(
 	async (payload: z.infer<typeof loginSchema>) => {
@@ -35,15 +36,14 @@ export const changePassword = actionHandler(
 		const session = await getServerSession(authOptions)
 
 		if (!session) throw new AppException('Not Authorize.', 401)
-
 		const user = await userRepo.findByEmail(session.user.email)
 
 		if (!user) throw new AppException('Not Authorize.', 401)
-
 		await authSvc.comparePassword(oldPassword, user.password)
 
 		const hashedPassword = await authSvc.hashPassword(newPassword)
 		user.password = hashedPassword
+		setCurrentUserId(session.user.id)
 		await userRepo.update(user.id, user)
 		return { ...user }
 	},

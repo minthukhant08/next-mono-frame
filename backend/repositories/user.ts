@@ -1,10 +1,11 @@
 import { Prisma, User } from '@/backend/prisma/generated/prisma/client'
 import { DBhandler } from '@/utils/handlers/db-connection'
+import { ExtendedPrismaClient } from '../lib/prisma'
 
 export const findByEmail = async (
 	email: string,
 	options?: Prisma.UserFindFirstArgs,
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<User | null> => {
 	return DBhandler(
 		async (prisma) =>
@@ -31,7 +32,7 @@ export const all = async (
 export const update = async (
 	id: number,
 	data: Prisma.UserUpdateInput,
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<User | null> => {
 	return DBhandler(
 		async (prisma) => prisma.user.update({ where: { id }, data }),

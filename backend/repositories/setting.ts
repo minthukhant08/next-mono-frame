@@ -1,9 +1,10 @@
 import { Prisma, Setting } from '@/backend/prisma/generated/prisma/client'
 import { DBhandler } from '@/utils/handlers'
+import { ExtendedPrismaClient } from '../lib/prisma'
 
 export const getSettingValueByKey = (
 	key: string,
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<{ key: string; value: string } | null> => {
 	return DBhandler(
 		async (prisma) =>
@@ -23,7 +24,7 @@ export const getSettingValueByKey = (
 
 export const findByKey = async (
 	key: string,
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<Setting | null> => {
 	return DBhandler(
 		async (prisma) => prisma.setting.findFirst({ where: { key } }),
@@ -32,7 +33,7 @@ export const findByKey = async (
 }
 
 export const findAll = async (
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<Setting[] | null> => {
 	return DBhandler(async (prisma) => prisma.setting.findMany(), transaction)
 }
@@ -40,7 +41,7 @@ export const findAll = async (
 export const update = async (
 	id: number,
 	data: Prisma.SettingUpdateInput,
-	transaction?: Prisma.TransactionClient,
+	transaction?: ExtendedPrismaClient,
 ): Promise<Setting | null> => {
 	return DBhandler(
 		async (prisma) => prisma.setting.update({ where: { id }, data }),

@@ -53,6 +53,17 @@ export default function ChangePasswordForm() {
 						{form.formState.errors.newPassword?.message}
 					</FieldError>
 				</Field>
+				<Field>
+					<FieldLabel htmlFor="newPassword">New Password</FieldLabel>
+					<Input
+						id="confirmNewPassword"
+						placeholder="Confirm new password"
+						{...form.register('confirmNewPassword')}
+					/>
+					<FieldError>
+						{form.formState.errors.confirmNewPassword?.message}
+					</FieldError>
+				</Field>
 				<Button type="submit">Submit</Button>
 			</form>
 		</Form>

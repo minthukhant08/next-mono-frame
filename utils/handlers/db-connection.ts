@@ -1,8 +1,8 @@
 import { Prisma } from '@/backend/prisma/generated/prisma/client'
-import { prisma } from '@/backend/lib/prisma'
+import { ExtendedPrismaClient, prisma } from '@/backend/lib/prisma'
 import DBException from '@/backend/exceptions/db-exception'
 
-export const getPrisamInstant = (transaction?: Prisma.TransactionClient) => {
+export const getPrisamInstant = (transaction?: ExtendedPrismaClient) => {
 	return transaction || prisma
 }
 
@@ -37,8 +37,8 @@ export const catchDBError = async <T>(
 }
 
 export const DBhandler = async <T>(
-	operation: (transaction: Prisma.TransactionClient) => Promise<T>,
-	transaction?: Prisma.TransactionClient,
+	operation: (transaction: ExtendedPrismaClient) => Promise<T>,
+	transaction?: ExtendedPrismaClient,
 ): Promise<T | null> => {
 	return catchDBError(async () => {
 		const prisma = getPrisamInstant(transaction)
