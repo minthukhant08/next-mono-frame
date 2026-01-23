@@ -6,16 +6,22 @@ const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString })
 const prismaClient = new PrismaClient({ adapter })
+
 const AUDITED_MODELS = ['User']
+
+const MONITORED_ACTIONS = [
+	'create',
+	'update',
+	'upsert',
+	'delete',
+	'updateMany',
+	'deleteMany',
+]
 
 let currentUserId: number | null = null
 
 export async function setCurrentUserId(userId: number | undefined) {
 	currentUserId = userId || null
-}
-
-export function getCurrentUserId() {
-	return currentUserId || null
 }
 
 export const prisma = prismaClient.$extends({
@@ -26,22 +32,10 @@ export const prisma = prismaClient.$extends({
 					return query(args)
 				}
 
-				const monitoredActions = [
-					'create',
-					'update',
-					'upsert',
-					'delete',
-					'updateMany',
-					'deleteMany',
-				]
-				if (
-					!monitoredActions.includes(operation) ||
-					model === 'AuditLog'
-				) {
+				if (!MONITORED_ACTIONS.includes(operation)) {
 					return query(args)
 				}
 
-				const userId = getCurrentUserId()
 				let oldData = null
 
 				if (operation !== 'create') {
@@ -66,7 +60,7 @@ export const prisma = prismaClient.$extends({
 							operation === 'delete'
 								? null
 								: JSON.parse(JSON.stringify(result)),
-						userId: userId?.toString(),
+						userId: currentUserId?.toString(),
 					},
 				})
 
