@@ -9,7 +9,9 @@ This is a boiler template for developing nextjs with monolithic style using pris
 - `npm run db:seed` - run seeders (default cred => admin@admin.com, password)
 - `npm run dev` - start dev server
 - `npm run db:studio` - launch database client 
+- `docker compose up postgres -d` if you don't have local db setup
 
 ## production environment
 - copy `example.env` file to `.env` and edit values
 - `docker compose up -d` to run containers
+- `docker compose up --rm prisma sh` if you want to use prisma cli
