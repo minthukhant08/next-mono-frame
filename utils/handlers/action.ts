@@ -1,3 +1,4 @@
+import AppException from '@/backend/exceptions/app-exception'
 import { transformZodErrors } from '@/utils'
 import { ZodError } from 'zod'
 
@@ -16,7 +17,7 @@ export type ActionResponse<T> = ActionSuccess<T> | ActionError
 const getErrorResponse = (error: unknown): string => {
 	if (error instanceof ZodError) {
 		return JSON.stringify(transformZodErrors(error))
-	} else if (error instanceof Error) {
+	} else if (error instanceof Error || error instanceof AppException) {
 		return error.message
 	}
 	return 'An unknown error occurred'

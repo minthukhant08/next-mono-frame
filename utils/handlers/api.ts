@@ -1,3 +1,4 @@
+import AppException from '@/backend/exceptions/app-exception'
 import { transformZodErrors } from '@/utils'
 import { validate } from '@/utils'
 import { NextRequest, NextResponse } from 'next/server'
@@ -7,20 +8,22 @@ type Handler = (req: NextRequest, context?: any) => Promise<Response>
 
 const getErrorResponse = (error: unknown): NextResponse<ErrorResponse> => {
 	let statusCode = 500
-	let errorMessage: string | object = 'Internal Server Error'
+	let message: string | object = 'Internal Server Error'
 
 	if (error instanceof ZodError) {
 		statusCode = 422
-		errorMessage = transformZodErrors(error)
-	} else if (error instanceof Error && (error as any).statusCode) {
-		statusCode = (error as any).statusCode
-		errorMessage = error.message
+		message = transformZodErrors(error)
+	} else if (error instanceof Error || error instanceof AppException) {
+		message = error.message
+		if ((error as any).statusCode) {
+			statusCode = (error as any).statusCode
+		}
 	} else if (error instanceof Error) {
-		errorMessage = error.message
+		message = error.message
 	}
 
 	return NextResponse.json(
-		{ ok: false, message: errorMessage },
+		{ ok: false, message: message },
 		{ status: statusCode },
 	)
 }

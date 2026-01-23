@@ -1,11 +1,11 @@
 class DBException extends Error {
 	statusCode: number
-	errorMessage: string
+	message: string
 	meta: unknown
 	constructor(message: string, meta: unknown, statusCode: number) {
 		super(message)
 		this.statusCode = statusCode
-		this.errorMessage = message
+		this.message = message
 		this.meta = meta
 	}
 }
